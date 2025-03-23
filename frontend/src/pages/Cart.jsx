@@ -1,14 +1,30 @@
 import React from "react";
 import { useCart } from "../context/CartContext.jsx";
 
-// import { useSelector, useDispatch } from "react-redux";
-// // import {removeFromCart} from "../context/CartContext.jsx";
+
 import { Link } from "react-router-dom";
 
 const Cart = () => {
-  // const state = useSelector((state) => state.handleCart);
-  // const dispatch = useDispatch();
-  const { cart, removeFromCart, addToCart } = useCart();
+ 
+
+  const { cart, removeFromCart, addToCart, incrementQty, decrementQty } = useCart();
+
+
+
+  // const increment = (id) => {
+  //   setProducts(cart.map(p => p.id === id ? { ...p, quantity: p.quantity + 1 } : p));
+  // };
+
+  // const decrement = (id) => {
+  //   setProducts(cart.map(p => p.id === id && p.quantity > 1 ? { ...p, quantity: p.quantity - 1 } : p));
+  // };
+
+  // const removeProduct = (id) => {
+  //   setProducts(cart.filter(p => p.id !== id));
+  // };
+
+  // const totalPrice = cart.reduce((acc, cart) => acc + p.price * p.quantity, 0);
+
 
 
   const EmptyCart = () => {
@@ -44,6 +60,10 @@ const Cart = () => {
     cart.map((item) => {
       return (totalItems += item.qty);
     });
+
+
+
+
     return (
       <>
         <section className="h-100 gradient-custom">
@@ -57,7 +77,8 @@ const Cart = () => {
                   <div className="card-body">
                     {cart.map((item) => {
                       return (
-                        <div key={item.id}>
+                        <div key={item._id}>
+                          <p>{item._id}</p>
                           <div className="row d-flex align-items-center">
                             <div className="col-lg-3 col-md-12">
                               <div
@@ -66,7 +87,6 @@ const Cart = () => {
                               >
                                 <img
                                   src={item.image}
-                                  // className="w-100"
                                   alt={item.title}
                                   width={100}
                                   height={75}
@@ -78,8 +98,6 @@ const Cart = () => {
                               <p>
                                 <strong>{item.title}</strong>
                               </p>
-                              {/* <p>Color: blue</p>
-                              <p>Size: M</p> */}
                             </div>
 
                             <div className="col-lg-4 col-md-6">
@@ -90,10 +108,10 @@ const Cart = () => {
                                 <button
                                   className="btn px-3"
                                   onClick={() => {
-                                    removeFromCart(item);
+                                    decrementQty(item);
                                   }}
                                 >
-                                  _
+                                  -
                                 </button>
 
                                 <p className="mx-5">{item.qty}</p>
@@ -101,10 +119,10 @@ const Cart = () => {
                                 <button
                                   className="btn px-3"
                                   onClick={() => {
-                                    addToCart(item);
+                                    incrementQty(item);
                                   }}
                                 >
-                                +
+                                  +
                                 </button>
                               </div>
 
@@ -149,7 +167,10 @@ const Cart = () => {
                     </ul>
 
                     <Link
-                      to="/checkout"
+                      to={{
+                        pathname: "/checkout",
+                        state: { cart, subtotal, shipping, totalItems }
+                      }}
                       className="btn btn-dark btn-lg btn-block"
                     >
                       Go to checkout

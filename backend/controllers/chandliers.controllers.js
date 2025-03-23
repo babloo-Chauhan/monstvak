@@ -1,4 +1,13 @@
 import Chandeliers from '../models/Chandliers.Model.js'
+import multer from 'multer'
+
+// Multer setup for file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+});
+
+const upload = multer({ storage });
 
 export const getAllChandeliers = async (req, res) => {
     try {
@@ -19,8 +28,11 @@ export const getChandlierById = async (req, res) => {
 };
 
 export const createChandlier = async (req, res) => {
-    const chandlier = req.body;
-    const newChandlier = new Chandeliers(chandlier);
+    const {title,price,} = req.body;
+     const image = req.file ? `/uploads/${req.file.filename}` : "";
+    const newChandlier = new Chandeliers({
+
+    });
     try {
         await newChandlier.save();
         res.status(201).json(newChandlier);

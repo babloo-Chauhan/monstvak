@@ -6,6 +6,7 @@ const chandeliersSchema=mongoose.Schema({
   price: Number,
   category: String,
   image: String,
+  // qty: { type: Number, default: 1 },
 });
 
 const Chandeliers= mongoose.model("Chandlier", chandeliersSchema);

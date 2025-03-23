@@ -3,8 +3,9 @@ import axios from 'axios';
 import Card from '../pages/Card'
 
 
+
 const Product = () => {
-  const [product, setProduct] = useState(null);
+  const [products, setProducts] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -12,7 +13,7 @@ const Product = () => {
     const fetchProduct = async () => {
       try {
         const response = await axios.get('http://localhost:3001/api/chandliers'); // Replace with your API endpoint
-        setProduct(response.data);
+        setProducts(response.data);
         
       } catch (err) {
         setError(err.message);
@@ -31,8 +32,9 @@ const Product = () => {
   return (
     <div>
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
-        {product.map((item) => (
-          <Card key={item.id} item={item} />
+        {products.map((item) => (
+          
+          <Card key={item._id} item={item} />
         ))}
       </div>
     </div>

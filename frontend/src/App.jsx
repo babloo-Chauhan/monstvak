@@ -6,8 +6,14 @@ import Product from "./pages/Product";
 import Cart from "./pages/Cart";
 
 import ContactUs from "./pages/ContactUs";
+import SingleProduct from "./pages/SingleProduct";
+import Checkout from "./pages/Checkout";
+import Payment from "./pages/Payment";
+import ProductForm from "./components/ProductForm";
+import ProductList from "./components/ProductList";
 const App = () => {
   const [cart, setCart] = useState([]);
+  const [refresh, setRefresh] = useState(false);
 
   const addToCart = (product) => {
     setCart([...cart, product]);
@@ -15,14 +21,21 @@ const App = () => {
 
   return (
   
-      
-      <Routes>
+      <>
+      {/* <Routes>
         <Route path="/" element={<Home />} />
         
         <Route path="/products" element={<Product addToCart={addToCart} />} />
-        <Route path="/cart" element={<Cart cart={cart} />} />
+        <Route path="/cart" element={<Cart cart={cart}  />} />
         <Route path="/contact" element={<ContactUs />} />
-      </Routes>
+        <Route path="/single" element={<SingleProduct  />} />
+        <Route path="/checkout" element={<Checkout  />} />
+        <Route path="/payment" element={<Payment/>} />
+     
+      </Routes> */}
+       <ProductForm onProductAdded={() => setRefresh(!refresh)} />
+      <ProductList key={refresh} />
+    </>
     
   );
 };
