@@ -1,10 +1,19 @@
 import ProductModel from "../models/product.model.js";
+import { v2 as cloudinary } from "cloudinary";
+import fs from "fs";
+import { upload } from "../routes/product.route.js";
+import { unlink } from "fs";
 
-export const createProductController = async (request, response) => {
+export const createProductController = async (request, response,) => {
+
+ 
+  
   try {
+
+    const uploadedFiles = [];
     const {
       name,
-      image,
+      // image,
       category,
       subCategory,
       unit,
@@ -13,27 +22,53 @@ export const createProductController = async (request, response) => {
       discount,
       description,
       more_details,
+      features,
     } = request.body;
 
-    if (
-      !name ||
-      !image[0] ||
-      !category[0] ||
-      !subCategory[0] ||
-      !unit ||
-      !price ||
-      !description
-    ) {
-      return response.status(400).json({
-        message: "Enter required fields",
-        error: true,
-        success: false,
+    console.log(1);
+
+    // if (
+    //   !name ||
+    //   // !image[0] ||
+    //   !category[0] ||
+    //   !subCategory[0] ||
+    //   !unit ||
+    //   !price ||
+    //   !description
+    // ) {
+    //   return response.status(400).json({
+    //     message: "Enter required fields",
+    //     error: true,
+    //     success: false,
+    //   });
+    // }
+
+    // Upload an image
+    console.log({ backend: request.files.map((file) => file.path) });
+    const images = request.files.map((file) => file.path);
+    console.log("i", images);
+
+
+
+
+    // Loop through files and upload to Cloudinary
+    for (const file of request.files) {
+      const result = await cloudinary.uploader.upload(file.path, {
+        folder: "uploads", // Cloudinary folder
       });
+
+      uploadedFiles.push(result.secure_url);
+      console.log(file.path);
+      // Remove file from local storage after upload
+       unlink(file.path, (err) => {
+         if (err) throw err;
+         console.log("image  was deleted from local storage");
+       });
     }
 
     const product = new ProductModel({
       name,
-      image,
+      image: uploadedFiles,
       category,
       subCategory,
       unit,
@@ -42,9 +77,27 @@ export const createProductController = async (request, response) => {
       discount,
       description,
       more_details,
+      features,
     });
-    const saveProduct = await product.save();
 
+    console.log(3);
+    console.log(product);
+    const saveProduct = await product.save();
+    console.log("saveproduct", saveProduct);
+
+    console.log(4);
+
+    //  Delete the file from the server
+
+    // Delete the files from the server
+    // images.forEach((image) => {
+    //   fs.unlink(image, (err) => {
+    //     if (err) console.log(err);
+    //     else console.log('file removed');
+    //   });
+    // });
+
+    console.log(5);
     return response.json({
       message: "Product Created Successfully",
       data: saveProduct,
@@ -324,3 +377,24 @@ export const searchProduct = async (request, response) => {
     });
   }
 };
+
+// get all product
+
+export const getAllProduct = async (request, response) => {
+  try {
+    const product = await ProductModel.find();
+
+    return response.json({
+      message: "All product",
+      data: product,
+      error: false,
+      success: true,
+    });
+  } catch (error) {
+    return response.status(500).json({
+      message: error.message || error,
+      error: true,
+      success: false,
+    });
+  }
+}

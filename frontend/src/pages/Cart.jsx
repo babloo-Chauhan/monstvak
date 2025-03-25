@@ -1,31 +1,9 @@
 import React from "react";
 import { useCart } from "../context/CartContext.jsx";
-
-
 import { Link } from "react-router-dom";
 
 const Cart = () => {
- 
-
-  const { cart, removeFromCart, addToCart, incrementQty, decrementQty } = useCart();
-
-
-
-  // const increment = (id) => {
-  //   setProducts(cart.map(p => p.id === id ? { ...p, quantity: p.quantity + 1 } : p));
-  // };
-
-  // const decrement = (id) => {
-  //   setProducts(cart.map(p => p.id === id && p.quantity > 1 ? { ...p, quantity: p.quantity - 1 } : p));
-  // };
-
-  // const removeProduct = (id) => {
-  //   setProducts(cart.filter(p => p.id !== id));
-  // };
-
-  // const totalPrice = cart.reduce((acc, cart) => acc + p.price * p.quantity, 0);
-
-
+  const { cart, incrementQty, decrementQty } = useCart();
 
   const EmptyCart = () => {
     return (
@@ -42,12 +20,6 @@ const Cart = () => {
     );
   };
 
-  // const addItem = (product) => {
-  //   dispatch(addCart(product));
-  // };
-  // const removeItem = (product) => {
-  //   dispatch(delCart(product));
-  // };
 
   const ShowCart = () => {
     let subtotal = 0;
@@ -60,9 +32,6 @@ const Cart = () => {
     cart.map((item) => {
       return (totalItems += item.qty);
     });
-
-
-
 
     return (
       <>
@@ -168,9 +137,10 @@ const Cart = () => {
 
                     <Link
                       to={{
-                        pathname: "/checkout",
-                        state: { cart, subtotal, shipping, totalItems }
+                        pathname: "/checkout"
                       }}
+                      state={{ cart, subtotal, shipping}}
+
                       className="btn btn-dark btn-lg btn-block"
                     >
                       Go to checkout
@@ -187,13 +157,11 @@ const Cart = () => {
 
   return (
     <>
-
       <div className="container my-3 py-3">
         <h1 className="text-center">Cart</h1>
         <hr />
         {cart.length > 0 ? <ShowCart /> : <EmptyCart />}
       </div>
-
     </>
   );
 };

@@ -30,7 +30,7 @@ const Navbar = () => {
       <div className="sticky top-0 z-50 bg-gray-900 shadow-md flex justify-between items-center px-6 py-4 text-yellow-500">
         {/* Logo */}
         {/* <Link to="/" > */}
-        <Link to="/" className="text-2xl font-bold text-yellow-500">MONSTVAK</Link>
+        <Link to="/" className="text-2xl font-bold text-yellow-500 ">MONSTVAK</Link>
         {/* </Link> */}
 
         {/* Search Bar */}

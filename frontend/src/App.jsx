@@ -22,19 +22,20 @@ const App = () => {
   return (
   
       <>
-      {/* <Routes>
+      <Routes>
         <Route path="/" element={<Home />} />
         
         <Route path="/products" element={<Product addToCart={addToCart} />} />
-        <Route path="/cart" element={<Cart cart={cart}  />} />
+        <Route path="/cart" element={<Cart cart={cart} key={cart._id} />} />
         <Route path="/contact" element={<ContactUs />} />
         <Route path="/single" element={<SingleProduct  />} />
         <Route path="/checkout" element={<Checkout  />} />
         <Route path="/payment" element={<Payment/>} />
+        <Route path="/add" element={<><ProductForm onProductAdded={() => setRefresh(!refresh)} /><ProductList key={refresh} /></>} />
      
-      </Routes> */}
-       <ProductForm onProductAdded={() => setRefresh(!refresh)} />
-      <ProductList key={refresh} />
+      </Routes>
+       {/* <ProductForm onProductAdded={() => setRefresh(!refresh)} /> */}
+      
     </>
     
   );

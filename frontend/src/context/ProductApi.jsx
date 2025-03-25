@@ -1,16 +1,26 @@
 import axios from "axios";
 
-const API_URL = "http://localhost:5000/api/products";
+const API_URL = "http://localhost:3001/api/products";
 
 export const addProduct = async (product) => {
+    
     const formData = new FormData();
     formData.append("name", product.name);
     formData.append("price", product.price);
-    formData.append("image", product.image);
+    formData.append("description", product.description);
+    product.image.forEach((image, index) => {
+        formData.append(`image`, image);
+    
+    });
+    product.features.forEach((feature, index) => {
+        formData.append(`features[${index}]`, feature);
+    });
 
-    return await axios.post(API_URL, formData, {
+    const result= await axios.post(API_URL, formData, {
         headers: { "Content-Type": "multipart/form-data" },
     });
+    console.log("Result:", result); // Log result
+    return result;
 };
 
 export const getProducts = async () => {

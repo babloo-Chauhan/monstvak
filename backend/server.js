@@ -2,7 +2,11 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
-import Chandeliers from "./routes/chandeliers.js";
+
+
+import productRouters from "./routes/product.route.js";
+import { v2 as cloudinary } from "cloudinary";
+
 
 
 dotenv.config();
@@ -10,6 +14,14 @@ dotenv.config();
 const app = express();
 app.use(express.json());
 app.use(cors());
+app.use("/uploads", express.static("uploads"));
+
+ // Configuration
+    cloudinary.config({
+      cloud_name: "dh7fgb3vg",
+      api_key: "479965845347275",
+      api_secret: "aZ5Lq5EgXm3Y5tO_I_G12dXyWL4", // Click 'View API Keys' above to copy your API secret
+    });
 
 try {
   mongoose.connect(
@@ -25,7 +37,9 @@ try {
 
 
 // app.use("/api/users", require("./routes/userRoutes"));
-app.use("/api", Chandeliers);
+
+// app.use("/api/products", productRoutes);
+app.use("/api/products", productRouters);
 
 
 

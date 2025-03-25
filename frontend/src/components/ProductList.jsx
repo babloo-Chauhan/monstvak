@@ -2,7 +2,16 @@ import { useEffect, useState } from "react";
 import { getProducts } from "../context/ProductApi";
 
 const ProductList = () => {
-    const [products, setProducts] = useState([]);
+    const [products, setProducts] = useState([
+        {
+            _id: "",
+            name: "",
+            price: "",
+            image: "",
+        },
+
+    ]);
+
 
     useEffect(() => {
         fetchProducts();
@@ -10,7 +19,9 @@ const ProductList = () => {
 
     const fetchProducts = async () => {
         const { data } = await getProducts();
-        setProducts(data);
+        console.log(data.data);
+        setProducts(data.data);
+       
     };
 
     return (
@@ -19,7 +30,7 @@ const ProductList = () => {
             <div className="grid grid-cols-3 gap-4">
                 {products.map((product) => (
                     <div key={product._id} className="p-4 border rounded-lg shadow">
-                        <img src={`http://localhost:5000${product.image}`} alt={product.name} className="w-full h-40 object-cover rounded" />
+                        <img src={product.image[0]} alt={product.name} className="w-full h-40 object-cover rounded" />
                         <h3 className="text-lg font-semibold mt-2">{product.name}</h3>
                         <p>${product.price}</p>
                     </div>

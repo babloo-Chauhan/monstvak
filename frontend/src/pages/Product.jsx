@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Card from '../pages/Card'
-
-
+import Card from '../pages/Card';
 
 const Product = () => {
   const [products, setProducts] = useState(null);
@@ -12,8 +10,8 @@ const Product = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await axios.get('http://localhost:3001/api/chandliers'); // Replace with your API endpoint
-        setProducts(response.data);
+        const response = await axios.get('http://localhost:3001/api/products'); // Replace with your API endpoint
+        setProducts(response.data.data);
         
       } catch (err) {
         setError(err.message);
@@ -30,7 +28,7 @@ const Product = () => {
 
 
   return (
-    <div>
+    <div className='flex justify-center'>
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-4">
         {products.map((item) => (
           

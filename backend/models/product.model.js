@@ -9,18 +9,18 @@ const productSchema = new mongoose.Schema(
       type: Array,
       default: [],
     },
-    category: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "category",
-      },
-    ],
-    subCategory: [
-      {
-        type: mongoose.Schema.ObjectId,
-        ref: "subCategory",
-      },
-    ],
+    // category: [
+    //   {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: "category",
+    //   },
+    // ],
+    // subCategory: [
+    //   {
+    //     type: mongoose.Schema.ObjectId,
+    //     ref: "subCategory",
+    //   },
+    // ],
     unit: {
       type: String,
       default: "",
@@ -49,13 +49,18 @@ const productSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
+
+    features: {
+      type: Array,
+      default: [],
+    },
   },
   {
     timestamps: true,
   }
 );
 
-//create a text index
+// create a text index
 productSchema.index(
   {
     name: "text",

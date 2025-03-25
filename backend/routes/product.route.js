@@ -1,8 +1,11 @@
 import { Router } from "express";
-import auth from "../middleware/auth.js";
+// import auth from "../middleware/auth.js";
+import multer from "multer";
+
 import {
   createProductController,
   deleteProductDetails,
+  getAllProduct,
   getProductByCategory,
   getProductByCategoryAndSubCategory,
   getProductController,
@@ -12,9 +15,17 @@ import {
 } from "../controllers/product.controller.js";
 import { admin } from "../middleware/Admin.js";
 
+// Multer setup for file storage
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => cb(null, "uploads/"),
+  filename: (req, file, cb) => cb(null, Date.now() + "-" + file.originalname),
+});
+
+export const upload = multer({ storage });
+
 const productRouter = Router();
 
-productRouter.post("/create", auth, admin, createProductController);
+productRouter.post("/", upload.array("image"), createProductController);
 productRouter.post("/get", getProductController);
 productRouter.post("/get-product-by-category", getProductByCategory);
 productRouter.post(
@@ -24,12 +35,19 @@ productRouter.post(
 productRouter.post("/get-product-details", getProductDetails);
 
 //update product
-productRouter.put("/update-product-details", auth, admin, updateProductDetails);
+productRouter.put("/update-product-details",  updateProductDetails);
 
 //delete product
-productRouter.delete("/delete-product", auth, admin, deleteProductDetails);
+productRouter.delete("/delete-product",  deleteProductDetails);
 
 //search product
 productRouter.post("/search-product", searchProduct);
+
+//get all products
+productRouter.get("/", getAllProduct);
+
+productRouter.get("/check", async (req, res) => {
+  res.send("Hello");
+});
 
 export default productRouter;
