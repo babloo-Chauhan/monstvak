@@ -1,8 +1,12 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
+import React, { useEffect, useState } from 'react';
+
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
+import { getSubCategories } from '../context/SubCategoryContext';
+import { Link } from 'react-router-dom';
 
 const images = [
   'https://www.whiteteak.com/media/customimages/homepage/MB_luxe_desk.webp?text=Slide+1',
@@ -12,6 +16,38 @@ const images = [
 ];
 
 export default function Home() {
+    const [allSubCategory, setAllSubCategory] = useState([]);
+  
+      // fetch categories from api
+  
+      useEffect(() => {
+          const fetchCategories = async () => {
+              try {
+                  const fetchedCategories = await getSubCategories();
+                  setAllSubCategory(fetchedCategories);
+                  console.log("Categories:", fetchedCategories.data.data);
+              } catch (error) {
+                  console.error("Error fetching categories:", error);
+              }
+          };
+          fetchCategories();
+      }, []);
+
+   // fetch subcategories from api
+  
+      useEffect(() => {
+          const fetchSubCategories = async () => {
+              try {
+                  const fetchedSubCategories = await getSubCategories();
+                  setAllSubCategory(fetchedSubCategories);
+                  console.log("Subcategories:", fetchedSubCategories.data.data);
+              } catch (error) {
+                  console.error("Error fetching subcategories:", error);
+              }
+          };
+          fetchSubCategories();
+      }, []);
+  
   return (
     <>
       <div className="w-full p-4">
@@ -49,64 +85,24 @@ export default function Home() {
 
       {/* third secton of home page */}
 
+      
 
-      <div className="third-col mt-6">
+      <div className="all-category mt-6">
         <div className="heading">
-          <h1 className='text-center text-3xl'>Shop Decorative Lighting, Home Decor & Designer Fans</h1>
+          <h1 className='text-center text-3xl'>All Categories</h1>
         </div>
-        <div className="product-col flex flex-wrap justify-center items-center ">
-          <div className="product  ">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
-
-          <div className="product">
-            <img src="https://www.whiteteak.com/media/wysiwyg/Categories_chandeliers_2.jpg" alt="" />
-            <h2>Chandeliers</h2>
-          </div>
+        <div className="category-grid grid grid-cols-2 md:grid-cols-4 gap-4 p-4">
+          {allSubCategory?.data?.data?.map((category, index) => (
+        <div key={index} className="category-item text-center">
+          <Link to={{ pathname: '/products' }} state={{ categoryId: category._id }}>
+          <img src={category.image} alt={category.name} className="w-full h-auto rounded-2xl" />
+          </Link>
+          <h2 className="mt-2 text-lg font-semibold">{category.name}</h2>
+        </div>
+          ))}
         </div>
       </div>
-
+      
       {/* fourth section of home page */}
 
 

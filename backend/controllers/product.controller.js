@@ -3,6 +3,7 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from "fs";
 import { upload } from "../routes/product.route.js";
 import { unlink } from "fs";
+import mongoose from "mongoose";
 
 export const createProductController = async (request, response,) => {
 
@@ -13,7 +14,7 @@ export const createProductController = async (request, response,) => {
     const uploadedFiles = [];
     const {
       name,
-      // image,
+      image,
       category,
       subCategory,
       unit,
@@ -25,7 +26,7 @@ export const createProductController = async (request, response,) => {
       features,
     } = request.body;
 
-    console.log(1);
+    console.log("request body", request.body);
 
     // if (
     //   !name ||
@@ -44,33 +45,37 @@ export const createProductController = async (request, response,) => {
     // }
 
     // Upload an image
-    console.log({ backend: request.files.map((file) => file.path) });
-    const images = request.files.map((file) => file.path);
-    console.log("i", images);
+    // console.log({ backend: request.files.map((file) => file.path) });
+    // const images = request.files.map((file) => file.path);
+    // console.log("i", images);
 
 
 
 
-    // Loop through files and upload to Cloudinary
-    for (const file of request.files) {
-      const result = await cloudinary.uploader.upload(file.path, {
-        folder: "uploads", // Cloudinary folder
-      });
+    // // Loop through files and upload to Cloudinary
+    // for (const file of request.files) {
+    //   const result = await cloudinary.uploader.upload(file.path, {
+    //     folder: "uploads", // Cloudinary folder
+    //   });
 
-      uploadedFiles.push(result.secure_url);
-      console.log(file.path);
-      // Remove file from local storage after upload
-       unlink(file.path, (err) => {
-         if (err) throw err;
-         console.log("image  was deleted from local storage");
-       });
-    }
+    //   uploadedFiles.push(result.secure_url);
+    //   console.log(file.path);
+    //   // Remove file from local storage after upload
+    //    unlink(file.path, (err) => {
+    //      if (err) throw err;
+    //      console.log("image  was deleted from local storage");
+    //    });
+    // }
+
+    
 
     const product = new ProductModel({
       name,
-      image: uploadedFiles,
+      image,
       category,
       subCategory,
+   
+     
       unit,
       stock,
       price,
@@ -87,15 +92,7 @@ export const createProductController = async (request, response,) => {
 
     console.log(4);
 
-    //  Delete the file from the server
-
-    // Delete the files from the server
-    // images.forEach((image) => {
-    //   fs.unlink(image, (err) => {
-    //     if (err) console.log(err);
-    //     else console.log('file removed');
-    //   });
-    // });
+  
 
     console.log(5);
     return response.json({

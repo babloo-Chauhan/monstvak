@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useCart } from "../context/CartContext";
+import { getProducts } from "../context/ProductApi";
+
 
 const SingleProduct = () => {
   const [productQuantity, setproductQuantity] = useState(1);
@@ -9,6 +11,38 @@ const SingleProduct = () => {
   const { item } = location.state;
   const { addToCartFromSingleProduct } = useCart();
   const [selectedImage, setSelectedImage] = useState(item.image[0]);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+
+  
+// fetch related product
+
+    useEffect(() => {
+    
+      const fetchRelatedProducts = async () => {
+        try {
+          const { data } = await getProducts();
+        
+          // Filter related products based on category
+
+          const related = data.data.filter(
+            (product) =>
+              product.category.some((catId) => item.category.includes(catId)) &&
+              product.category[0] === item.category[0] &&
+              product._id !== item._id
+          );
+          console.log("related", related);
+          setRelatedProducts(related);
+        } catch (error) {
+          console.error("Error fetching related products:", error);
+        }
+      };
+      fetchRelatedProducts();
+    }, []);
+  
+
+
+
+
 
   const handleIncrement = () => {
     setproductQuantity(productQuantity + 1);
@@ -17,18 +51,21 @@ const SingleProduct = () => {
     setproductQuantity(productQuantity <= 1 ? 1 : productQuantity - 1);
   };
 
+ 
+
   return (
     <>
       <div className="flex flex-col  md:flex-row justify-center min-h-screen p-4 bg-gray-100">
         {/*  Left Section - Images */}
 
-        <div className="flex flex-col items-center md:items-start md:w-1/2 space-y-4 img-slider relative m-2 min-w-[40%] overflow-hidden rounded-[20px] bg-white lg:sticky lg:top-0 lg:mx-2 lg:mb-4 lg:h-fit lg:max-w-lg lg:rounded-3xl">
+        <div className="flex flex-col items-center   md:w-1/2 space-y-4 img-slider relative m-2 min-w-[40%] overflow-hidden rounded-[20px] bg-white lg:sticky lg:top-0 lg:mx-2 lg:mb-4 lg:h-fit lg:max-w-lg lg:rounded-3xl">
+        
           <img
             src={selectedImage}
             alt="Product"
-            className="w-full h-auto object-cover rounded-lg"
+            className="w-full md:w-96 h-auto object-cover rounded-lg"
           />
-          <div className="flex space-x-2">
+          <div className="flex  items-center space-x-2">
             {item.image.map((img, index) => (
               <img
                 key={index}
@@ -39,6 +76,7 @@ const SingleProduct = () => {
               />
             ))}
           </div>
+
         </div>
 
         {/*  Right Section - Product Details */}
@@ -99,7 +137,7 @@ const SingleProduct = () => {
           </div>
 
           <div className="mt-6 text-gray-700">
-            
+
             <ul className="list-disc list-inside mt-2">
               {item.features.map((feature, index) => (
                 <li key={index}>{feature}</li>
@@ -110,22 +148,32 @@ const SingleProduct = () => {
       </div>
 
       {/* Related Products */}
-      <div className="w-full mt-12 text-center">
-        <h3 className="text-xl font-bold mb-4">You May Also Like</h3>
-        <div className="flex flex-wrap justify-center gap-4">
-          {[1, 2, 3, 4, 5].map((_, index) => (
-            <div key={index} className="w-40 p-2 bg-white rounded-lg shadow-lg">
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6 p-6">
+        {relatedProducts.map((product) => (
+           <Link to={{ pathname: '/single' }} state={{ item: product }}>
+          <div key={product.id} className="bg-white shadow-md rounded-lg p-4">
+            <div className="relative">
               <img
-                src={item.image}
-                alt="Related Product"
-                className="w-full rounded-lg"
+                src={product.image}
+                alt={product.name}
+                className="w-full h-48 object-cover rounded-lg"
               />
-              <p className="text-sm mt-2">Product Name</p>
-              <p className="text-sm text-gray-600">Rs. 15,000</p>
+              {product.isNew && (
+                <span className="absolute top-2 left-2 bg-green-500 text-white px-2 py-1 text-xs rounded">New</span>
+              )}
             </div>
-          ))}
-        </div>
+            <h3 className="mt-4 text-lg font-semibold">{product.name}</h3>
+            <p className="text-gray-500 line-through">Rs. {product.oldPrice}</p>
+            <p className="text-red-500 font-bold">Rs. {product.newPrice}</p>
+          
+            <button className="mt-2 w-full bg-black text-white py-2 rounded hover:bg-gray-800">View</button>
+            
+          </div>
+          </Link>
+        ))}
       </div>
+
     </>
   );
 };

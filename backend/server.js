@@ -3,9 +3,12 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
 
-
+import subCategoryRouter from "./routes/subCategory.route.js";
 import productRouters from "./routes/product.route.js";
+import categoryRouters from "./routes/category.route.js";
+import uploadRouter from "./routes/upload.router.js";
 import { v2 as cloudinary } from "cloudinary";
+
 
 
 
@@ -40,6 +43,9 @@ try {
 
 // app.use("/api/products", productRoutes);
 app.use("/api/products", productRouters);
+app.use("/api/category", categoryRouters);
+app.use("/api/file",uploadRouter)
+app.use("/api/subcategory",subCategoryRouter)
 
 
 

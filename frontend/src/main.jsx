@@ -8,12 +8,13 @@ import Navbar from './pages/Navbar.jsx';
 import Footer from './pages/Footer.jsx';
 import { StrictMode } from 'react';
 import { CartProvider } from './context/CartContext.jsx';
-
+import { ThemeProvider } from "@material-tailwind/react";
 
 
 createRoot(document.getElementById('root')).render(
 
 <StrictMode>
+  <ThemeProvider>
   <CartProvider>
   <Router>
   <Navbar/>
@@ -21,6 +22,7 @@ createRoot(document.getElementById('root')).render(
   <Footer/>
   </Router>
   </CartProvider>
+  </ThemeProvider>
 </StrictMode>
 
   
