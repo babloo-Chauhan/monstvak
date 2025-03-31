@@ -11,6 +11,9 @@ import Checkout from "./pages/Checkout";
 import Payment from "./pages/Payment";
 import ProductForm from "./components/ProductForm";
 import ProductList from "./components/ProductList";
+import SearchPage from "./pages/SearchPage";
+import Login from "./pages/Login";
+import Signup from "./pages/Signup";
 const App = () => {
   const [cart, setCart] = useState([]);
   const [refresh, setRefresh] = useState(false);
@@ -32,7 +35,9 @@ const App = () => {
         <Route path="/checkout" element={<Checkout  />} />
         <Route path="/payment" element={<Payment/>} />
         <Route path="/add" element={<><ProductForm onProductAdded={() => setRefresh(!refresh)} /><ProductList key={refresh} /></>} />
-     
+     <Route path="/search" element={<SearchPage/>} />
+     <Route path="/login" element={<Login/>}/>
+     <Route path="/signup" element={<Signup/>}/>
       </Routes>
        {/* <ProductForm onProductAdded={() => setRefresh(!refresh)} /> */}
       

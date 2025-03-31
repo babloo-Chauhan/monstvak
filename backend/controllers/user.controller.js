@@ -47,7 +47,7 @@ export async function registerUserController(request, response) {
 
     const verifyEmail = await sendEmail({
       sendTo: email,
-      subject: "Verify email from binkeyit",
+      subject: "Verify email from monstvak",
       html: verifyEmailTemplate({
         name,
         url: VerifyEmailUrl,
@@ -181,7 +181,10 @@ export async function loginController(request, response) {
 //logout controller
 export async function logoutController(request, response) {
   try {
+    console.log("ksafl")
     const userid = request.userId; //middleware
+    console.log("jfklhjiksa")
+    console.log("user id ", userid)
 
     const cookiesOption = {
       httpOnly: true,

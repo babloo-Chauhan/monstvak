@@ -11,7 +11,7 @@ const uploadImageClodinary = async (image) => {
 
   const uploadImage = await new Promise((resolve, reject) => {
     cloudinary.uploader
-      .upload_stream({ folder: "binkeyit" }, (error, uploadResult) => {
+      .upload_stream({ folder: "monstvak" }, (error, uploadResult) => {
         return resolve(uploadResult);
       })
       .end(buffer);

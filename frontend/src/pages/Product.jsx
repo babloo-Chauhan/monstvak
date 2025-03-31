@@ -9,8 +9,23 @@ const Product = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const location = useLocation();
-
+  const [subCategories, setSubCategories] = useState([]);
   const { categoryId } = location.state || {};
+
+  useEffect(() => {
+    const fetchSubCategories = async () => {
+      try {
+        const subCategoriesData = await getSubCategories();
+        setSubCategories(subCategoriesData);
+      } catch (err) {
+        console.error("Failed to fetch subcategories:", err);
+      }
+    };
+
+    fetchSubCategories();
+  }, []);
+  const matchingSubCategory = subCategories?.data?.data?.find((c) => c._id === categoryId);
+  console.log("Matching SubCategory:", matchingSubCategory);
 
 
 console.log("categoryId", categoryId);
@@ -29,23 +44,11 @@ console.log("categoryId", categoryId);
       console.log("selectedCategory", selectedCategory);
    
 
-  const [subCategories, setSubCategories] = useState([]);
+  
 
   // console.log("subcategory", subCategories.data.data);
 
-  useEffect(() => {
-    const fetchSubCategories = async () => {
-      try {
-        const subCategoriesData = await getSubCategories();
-        setSubCategories(subCategoriesData);
-      } catch (err) {
-        console.error("Failed to fetch subcategories:", err);
-      }
-    };
-
-    fetchSubCategories();
-  }, []);
-
+  
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -88,7 +91,7 @@ console.log("categoryId", categoryId);
           value={selectedCategory}
         >
           if(categoryId){
-         <option value={categoryId}>{subCategories?.data?.data?.map((c)=>{c._id===categoryId})}</option>}
+              <option value={categoryId}>{matchingSubCategory?.name}</option>}
          else{
 <option value="All">All</option>
          }

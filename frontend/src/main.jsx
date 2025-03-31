@@ -13,7 +13,7 @@ import { ThemeProvider } from "@material-tailwind/react";
 
 createRoot(document.getElementById('root')).render(
 
-<StrictMode>
+
   <ThemeProvider>
   <CartProvider>
   <Router>
@@ -23,7 +23,7 @@ createRoot(document.getElementById('root')).render(
   </Router>
   </CartProvider>
   </ThemeProvider>
-</StrictMode>
+
 
   
 )

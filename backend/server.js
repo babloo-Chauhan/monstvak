@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 
 import subCategoryRouter from "./routes/subCategory.route.js";
+import userRouter from "./routes/user.route.js";
 import productRouters from "./routes/product.route.js";
 import categoryRouters from "./routes/category.route.js";
 import uploadRouter from "./routes/upload.router.js";
@@ -39,9 +40,7 @@ try {
 }
 
 
-// app.use("/api/users", require("./routes/userRoutes"));
-
-// app.use("/api/products", productRoutes);
+app.use("/api/users", userRouter);
 app.use("/api/products", productRouters);
 app.use("/api/category", categoryRouters);
 app.use("/api/file",uploadRouter)
