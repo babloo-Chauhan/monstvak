@@ -2,6 +2,7 @@ import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import cors from "cors";
+import Razorpay from 'razorpay'
 
 import subCategoryRouter from "./routes/subCategory.route.js";
 import userRouter from "./routes/user.route.js";
@@ -9,6 +10,7 @@ import productRouters from "./routes/product.route.js";
 import categoryRouters from "./routes/category.route.js";
 import uploadRouter from "./routes/upload.router.js";
 import { v2 as cloudinary } from "cloudinary";
+import crypto from 'crypto'
 
 
 
@@ -38,6 +40,46 @@ try {
   console.log("error: ", error);
   
 }
+
+const razorpay = new Razorpay({
+  key_id: "rzp_live_GcGnC4AkRptxDR",
+  key_secret: "zKzuthu7gVdDxLrdFRiK63Ej",
+});
+
+app.post("/create-order", async (req, res) => {
+  try {
+    const options = {
+      amount: req.body.amount * 100, // Amount in paise
+      currency: "INR",
+      receipt: "order_rcptid_11",
+    };
+
+    const order = await razorpay.orders.create(options);
+    res.json(order);
+  } catch (error) {
+    res.status(500).send(error);
+  }
+});
+
+
+
+
+app.post("/verify-payment", (req, res) => {
+  const { razorpay_order_id, razorpay_payment_id, razorpay_signature } =
+    req.body;
+  const secret = "YOUR_RAZORPAY_SECRET";
+
+  const hash = crypto
+    .createHmac("sha256", secret)
+    .update(razorpay_order_id + "|" + razorpay_payment_id)
+    .digest("hex");
+
+  if (hash === razorpay_signature) {
+    res.json({ success: true });
+  } else {
+    res.json({ success: false });
+  }
+});
 
 
 app.use("/api/users", userRouter);

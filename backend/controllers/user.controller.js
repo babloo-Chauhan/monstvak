@@ -145,7 +145,7 @@ export async function loginController(request, response) {
       });
     }
 
-    const accesstoken = await generatedAccessToken(user._id);
+    const token = await generatedAccessToken(user._id);
     const refreshToken = await genertedRefreshToken(user._id);
 
     const updateUser = await UserModel.findByIdAndUpdate(user?._id, {
@@ -157,7 +157,7 @@ export async function loginController(request, response) {
       secure: true,
       sameSite: "None",
     };
-    response.cookie("accessToken", accesstoken, cookiesOption);
+    response.cookie("token", token, cookiesOption);
     response.cookie("refreshToken", refreshToken, cookiesOption);
 
     return response.json({
@@ -165,7 +165,7 @@ export async function loginController(request, response) {
       error: false,
       success: true,
       data: {
-        accesstoken,
+        token,
         refreshToken,
       },
     });
@@ -181,10 +181,10 @@ export async function loginController(request, response) {
 //logout controller
 export async function logoutController(request, response) {
   try {
-    console.log("ksafl")
+    console.log("ksafl");
     const userid = request.userId; //middleware
-    console.log("jfklhjiksa")
-    console.log("user id ", userid)
+    console.log("jfklhjiksa");
+    console.log("user id ", userid);
 
     const cookiesOption = {
       httpOnly: true,
@@ -192,7 +192,7 @@ export async function logoutController(request, response) {
       sameSite: "None",
     };
 
-    response.clearCookie("accessToken", cookiesOption);
+    response.clearCookie("token", cookiesOption);
     response.clearCookie("refreshToken", cookiesOption);
 
     const removeRefreshToken = await UserModel.findByIdAndUpdate(userid, {
