@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createContext, useState, useContext } from "react";
 
 const CartContext = createContext();
@@ -5,8 +6,9 @@ const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (item) => {
+  const addToCart = async(item) => {
     const exist = cart.find((i) => i._id === item._id);
+  
 
     if (exist) {
       setCart((prevCart) =>

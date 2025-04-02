@@ -11,6 +11,7 @@ import categoryRouters from "./routes/category.route.js";
 import uploadRouter from "./routes/upload.router.js";
 import { v2 as cloudinary } from "cloudinary";
 import crypto from 'crypto'
+import cartRouter from "./routes/cart.route.js";
 
 
 
@@ -87,6 +88,7 @@ app.use("/api/products", productRouters);
 app.use("/api/category", categoryRouters);
 app.use("/api/file",uploadRouter)
 app.use("/api/subcategory",subCategoryRouter)
+app.use("/api/carts",cartRouter)
 
 
 

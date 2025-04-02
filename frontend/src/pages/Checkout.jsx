@@ -1,6 +1,6 @@
 import React from "react";
 import { useCart } from "../context/CartContext";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Checkout = () => {
     const { cart } = useCart();
@@ -9,6 +9,9 @@ const Checkout = () => {
         location.state || {};
     // const subtotals = cart.reduce((sum, item) => sum + item.price, 0);
     // const total = subtotal + (item ? item.price : 0);
+    console.log(subtotal)
+   const totalprice=subtotal+shipping;
+   
 
     return (
         <div className="min-h-screen bg-gray-900 text-white flex justify-center py-10">
@@ -69,9 +72,11 @@ const Checkout = () => {
                     <h3 className="text-xl font-semibold">Order Summary</h3>
                     <div className="mt-2 space-y-2">
                         {item ? (
+
+                            
                             <>
                                 <div className="flex justify-between bg-gray-700 p-2 rounded-md">
-                                    <img src={item.image} alt=""  className="w-10 h-10"/>
+                                    <img src={item.image} alt="" className="w-10 h-10" />
                                     <span>{item.title}</span>
                                     <span>
                                         ₹
@@ -128,9 +133,23 @@ const Checkout = () => {
                 </div>
 
                 {/* Pay Button */}
-                <button className="w-full p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold">
-                    Pay Now
-                </button>
+                {localStorage.getItem("token")?
+                (
+              <Link to={{ pathname: '/payment' }} state={{ totalprice,subtotal,item,productQuantity,cart}}>
+                    <button className="w-full p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold">
+                        Pay Now
+                    </button>
+                </Link>)
+                :
+
+                (
+                <Link to="/login">
+                    <button className="w-full p-3 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-semibold">
+                        Pay Now
+                    </button>
+                </Link>
+                )}
+
             </div>
         </div>
     );

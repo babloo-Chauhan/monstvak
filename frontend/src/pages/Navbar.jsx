@@ -131,9 +131,19 @@ const Navbar = () => {
               {cart.length}
             </span><FaShoppingCart className="cursor-pointer text-yellow-500" />
           </Link>
-          <Link to="/login">
-            <button className="fl</Link>ex items-center gap-1"><MdPerson /> Login</button>
-          </Link>
+
+
+            {localStorage.getItem("token") ? (
+            <Link to="/account" className="">
+              <button className="flex items-center gap-1"><MdPerson /> Account</button>
+            </Link>
+            ) : (
+            <Link to="/login" className="">
+              <button className="flex items-center gap-1"><MdPerson /> Login</button>
+            </Link>
+            )}
+        
+
         </div>
 
         {/* Mobile Menu Button */}

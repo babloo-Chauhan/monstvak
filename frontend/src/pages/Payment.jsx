@@ -5,22 +5,22 @@ import { useLocation } from 'react-router-dom';
 const Payment = () => {
     const [product, setProduct] = useState(null);
     const location=useLocation();
-    const { totalPrice } = location.state;
-    console.log(totalPrice)
+    const { totalprice, subtotal, item, productQuantity } = location.state|| {};
+   
 
-    useEffect(() => {
-        // Fetch product details from the checkout page
-        const fetchProductDetails = async () => {
-            try {
-                const response = await axios.get('/api/checkout');
-                setProduct(response.data);
-            } catch (error) {
-                console.error('Error fetching product details:', error);
-            }
-        };
+    // useEffect(() => {
+    //     // Fetch product details from the checkout page
+    //     const fetchProductDetails = async () => {
+    //         try {
+    //             const response = await axios.get('/api/checkout');
+    //             setProduct(response.data);
+    //         } catch (error) {
+    //             console.error('Error fetching product details:', error);
+    //         }
+    //     };
 
-        fetchProductDetails();
-    }, []);
+    //     fetchProductDetails();
+    // }, []);
 
     const loadRazorpay = () => {
         const script = document.createElement('script');
@@ -30,16 +30,16 @@ const Payment = () => {
     };
 
     const displayRazorpay = async () => {
-        const res = await axios.post('/api/razorpay', { amount: product.price });
+        const {data} = await axios.post('http://localhost:3001/create-order', { amount: item.price });
 
         const options = {
-            key: 'YOUR_RAZORPAY_KEY',
-            amount: res.data.amount,
+            key: 'rzp_live_GcGnC4AkRptxDR',
+            amount: data.amount,
             currency: 'INR',
-            name: 'Your Company Name',
+            name: 'kazoma industries',
             description: 'Test Transaction',
             image: 'https://your-logo-url.com',
-            order_id: res.data.id,
+            order_id:data.id,
             handler: function (response) {
                 alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
             },
@@ -63,11 +63,11 @@ const Payment = () => {
     return (
         <div>
             <h1 className='w-full text-center'>payment</h1>
-            {product ? (
+            {item ? (
                 <div>
-                    <h1>{product.name}</h1>
-                    <p>{product.description}</p>
-                    <h2>Price: ₹{totalPrice}</h2>
+                    <h1>{item.name}</h1>
+                    <p>{item.name}</p>
+                    <h2>Price: ₹{item.price}</h2>
                     <button onClick={loadRazorpay}>Pay with Razorpay</button>
                 </div>
             ) : (
