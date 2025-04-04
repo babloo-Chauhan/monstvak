@@ -84,7 +84,7 @@ const SingleProduct = () => {
         <div className="md:w-1/2 p-6 bg-white rounded-lg shadow-lg">
           <h2 className="text-2xl font-bold mb-4">{item.name}</h2>
           <p className="text-gray-600 text-lg">
-            <span className="text-red-500 line-through">Rs. 77,398.00</span>
+            <span className="text-red-500 line-through">Rs {item.price*10/100+item.price}</span>
             <span className="text-green-600 font-semibold text-xl ml-2">
               {item.price}
             </span>
@@ -164,8 +164,8 @@ const SingleProduct = () => {
               )}
             </div>
             <h3 className="mt-4 text-lg font-semibold">{product.name}</h3>
-            <p className="text-gray-500 line-through">Rs. {product.oldPrice}</p>
-            <p className="text-red-500 font-bold">Rs. {product.newPrice}</p>
+            <p className="text-gray-500 line-through">Rs. {product.price*10/100+product.price}</p>
+            <p className="text-red-500 font-bold">Rs. {product.price}</p>
           
             <button className="mt-2 w-full bg-black text-white py-2 rounded hover:bg-gray-800">View</button>
             
